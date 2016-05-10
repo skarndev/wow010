@@ -551,7 +551,7 @@ typedef struct  {
   uint32_t m_parentMapID;
   uint32_t m_cosmeticParentMapID;
   uint32_t m_timeOffset;
-} MapRec<size=88, read=readMapRec>;
+} MapRec<size=264, read=readMapRec>;
 
 string readMapRec(MapRec&rec)
 {
