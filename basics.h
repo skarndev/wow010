@@ -96,6 +96,16 @@ string stringrefread (stringref& ref)
   return ReadString (actual_offset);
 }
 
+int stringrefwrite (const char input[])
+{
+    int new_offset = header.string_block_size;
+    WriteString ( header.record_count * header.record_size + sizeof (header) + new_offset, input );
+    header.string_block_size = header.string_block_size + Strlen(input);
+    
+    return new_offset;
+     
+}
+
 // bitmask ---------------------------------------------------------------------
 
 typedef struct
