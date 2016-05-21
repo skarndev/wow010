@@ -551,7 +551,7 @@ typedef struct  {
   uint32_t m_parentMapID;
   uint32_t m_cosmeticParentMapID;
   uint32_t m_timeOffset;
-} MapRec<size=88, read=readMapRec>;
+} MapRec<size=264, read=readMapRec>;
 
 string readMapRec(MapRec&rec)
 {
@@ -732,6 +732,51 @@ if (rec.m_continentID==43)
   return ret;
 }
 
+/*
+typedef struct {
+  uint32_t id;
+  stringref name;
+}string_block<read=readStringBlock>;
+string readStringBlock (string_block& rec)
+{
+string a;
+SPrintf(a, "%i %s", rec.id, stringrefread(rec.name));
+return a;
+}
+*/
+
+typedef struct {
+  uint32_t m_ID;
+  stringref m_doodadpath;
+  uint32_t m_flags;
+} GroundEffectDoodadRec<read = readGroundEffectDoodadRec>;
+
+string readGroundEffectDoodadRec (GroundEffectDoodadRec& rec)
+{
+    string a;
+    SPrintf(a, "%i %s %i", rec.m_ID, stringrefread(rec.m_doodadpath), rec.m_flags);
+    return a;
+}
+
+typedef struct {
+  uint32_t m_ID;
+  uint32_t m_PathID;
+  uint32_t m_NodeIndex;
+  uint32_t m_ContinentID;
+  float m_Loc[3];
+  uint32_t m_flags;
+  uint32_t m_delay;
+  uint32_t m_arrivalEventID;
+  uint32_t m_departureEventID;
+} TaxiPathNodeRec<read = readTaxiPathNodeRec>;
+
+string readTaxiPathNodeRec (TaxiPathNodeRec& rec)
+{
+    string a;
+    SPrintf(a, "ID: %i Pos_XYZ: %f %f %f", rec.m_ID, rec.m_Loc[0], rec.m_Loc[1], rec.m_Loc[2]);
+    return a;
+}
+
 local string t_name = FileNameGetBase(GetFileName());
 
 if(t_name == "Map.dbc")
@@ -834,3 +879,12 @@ else if(t_name == "CharStartOutfit.dbc")
     GameObjectDisplayInfoRec records[header.record_count]<optimize=false>;
 } 
  
+else if(t_name == "GroundEffectDoodad.dbc")
+{
+    GroundEffectDoodadRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "TaxiPathNode.dbc")
+{
+    TaxiPathNodeRec records[header.record_count]<optimize=false>;
+} 
